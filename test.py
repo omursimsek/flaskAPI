@@ -1,5 +1,6 @@
-from flask import Flask, jsonify
+import json
 
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -26,9 +27,27 @@ books = [
 def hello_world():
     return 'hello test'
 
+
 @app.route('/api/v1/resources/books/all', methods=['GET'])
 def api_all():
     return jsonify(books)
+
+
+@app.route('/api/v1/hello_world')
+def h_world():
+    return 'Hello!'
+
+
+@app.route('/api/v1/resources/books/<int:book_id>', methods=['GET', 'POST'])
+def bookss(book_id):
+    if request.method == "GET":
+        for x in books:
+            if x['id'] == book_id:
+                return jsonify(x)
+        return "Not found"
+    if request.method == "PUT":
+        return "Book is added"
+
 
 if __name__ == '__main__':
     app.run()
